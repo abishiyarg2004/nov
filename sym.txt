@@ -1,0 +1,73 @@
+//sym
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+#define MAX_SYMBOLS 100
+
+struct SymbolTableEntry {
+    char variable[50];
+    char datatype[10];
+    int line_no;
+    char value[50];
+};
+
+struct SymbolTableEntry symbolTable[MAX_SYMBOLS];
+int symbolCount = 0;
+
+
+void addSymbol(char* datatype, char* variable, int line_no, char* value) {
+    strcpy(symbolTable[symbolCount].datatype, datatype);
+    strcpy(symbolTable[symbolCount].variable, variable);
+    symbolTable[symbolCount].line_no = line_no;
+    strcpy(symbolTable[symbolCount].value, value);
+    symbolCount++;
+}
+
+
+void printSymbolTable() {
+    printf("\nSYMBOL TABLE MANAGEMENT\n");
+    printf("Variable\tDatatype\tLine.no\tValue\n");
+    for (int i = 0; i < symbolCount; i++) {
+        printf("%s\t\t%s\t\t%d\t%s\n", symbolTable[i].variable,
+               symbolTable[i].datatype, symbolTable[i].line_no, symbolTable[i].value);
+    }
+}
+
+int main() {
+    int n, line_no = 1;
+    char datatype[10], variable[50], value[50];
+
+    printf("Enter the number of variable declarations: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("Enter datatype, variable name ");
+        scanf("%s %s", datatype, variable);
+
+       
+        char *equalSign = strchr(variable, '=');
+        if (equalSign != NULL) {
+            
+            *equalSign = '\0'; 
+            strcpy(value, equalSign + 1); 
+        } else {
+            strcpy(value, "garbage"); 
+        }
+
+       
+        char *semicolon = strchr(variable, ';');
+        if (semicolon != NULL) {
+            *semicolon = '\0';
+        }
+
+        
+        addSymbol(datatype, variable, line_no++, value);
+    }
+
+    printSymbolTable();
+
+    return 0;
+}
