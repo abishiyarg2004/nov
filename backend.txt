@@ -1,0 +1,51 @@
+//backend
+
+
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
+int reg_count = 1; 
+
+
+void generate_code(char op, char operand1[], char operand2[]) {
+    if (op == '*') {
+        printf("MULF %s, %s\n", operand1, operand2);
+    } else if (op == '/') {
+        printf("DIVF %s, %s\n", operand1, operand2);
+    } else if (op == '+') {
+        printf("ADDF %s, %s\n", operand1, operand2);
+    } else if (op == '-') {
+        printf("SUBF %s, %s\n", operand1, operand2);
+    }
+}
+
+int main() {
+    char a[50], b[50], id[50], op;
+    int i = 0, j = 0, len = 0, reg1, reg2, count;
+
+    printf("Enter the expression ");
+    scanf("%s", a);
+    strcpy(b, a);
+    len = strlen(a);
+
+   
+    for (i = 0; i < len; i++) {
+        if (isalpha(b[i])) {
+            printf("MOVF id%d, R%d\n", b[i] - 'a' + 1, reg_count++);
+        }
+    }
+
+    
+    reg1 = 1; 
+    for (i = 0; i < len; i++) {
+        if (b[i] == '*' || b[i] == '/' || b[i] == '+' || b[i] == '-') {
+            op = b[i];
+            reg2 = reg1 + 1;
+            generate_code(op, "R2", "R3");   
+            reg1++; 
+        }
+    }
+
+    return 0;
+}
